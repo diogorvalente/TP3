@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Tasklists</title>
+    <script type="text/javascript" src="/static/script.js" defer></script>
+</head>
+<body>
+    <h1>Tasklists</h1>
+    <h2>Implement your app here..</h2>
+
+    <h3>Register User</h3>
+    <form id="registerForm" onsubmit="registerUser(event)">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="text" name="name" placeholder="Name">
+        <input type="email" name="email" placeholder="Email">
+        <button type="submit">Register</button>
+    </form>
+
+    <h3>Users</h3>
+    <ul id="users"></ul>
+</body>
+</html>
