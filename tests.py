@@ -1,12 +1,11 @@
 """
- Tests the application API
-
+Tests the application API
 """
 
 import base64
 import unittest
 
-from app import app, db
+from app import app, db, recreate_db
 
 
 def auth_header(username, password):
@@ -21,9 +20,10 @@ class TestBase(unittest.TestCase):
 
     def setUp(self):
         app.config['TESTING'] = True
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test_database.db'
         self.client = app.test_client()
-        self.db = db
-        self.db.recreate()
+        with app.app_context():
+            recreate_db()
 
     def tearDown(self):
         pass
@@ -37,6 +37,16 @@ class TestUsers(TestBase):
 
     def test_correct_credentials(self):
         """Tests the user with correct credentials."""
+        # First, create a user
+        user_data = {
+            'name': 'Homer Simpson',
+            'email': 'homer@example.com',
+            'username': 'homer',
+            'password': '1234'
+        }
+        self.client.post('/api/user/register/', json=user_data)
+
+        # Now, test with correct credentials
         credentials = auth_header('homer', '1234')
         res = self.client.get('/api/user/', headers=credentials)
         self.assertEqual(res.status_code, 200)
@@ -60,3 +70,7 @@ class TestTasks(TestBase):
 
     def setUp(self):
         super().setUp()
+
+
+if __name__ == '__main__':
+    unittest.main()
